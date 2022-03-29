@@ -1,0 +1,29 @@
+#! /usr/bin/python
+import json
+from rofi import Rofi
+from typer import Typer
+from clipboarder import Clipboarder
+import os
+
+
+typer = Typer.best_option('')
+clipboarder = Clipboarder.best_option('')
+active_window = typer.get_active_window()
+r = Rofi()
+data = {}
+arr = []
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'emoji.json')) as f:
+    data = json.load(f)
+
+for i in data:
+    arr.append(i)
+    
+index,key = r.select('Choose one', arr,
+    rofi_args=['-i'])
+
+if(index == -1):
+    exit()
+#too slow    
+#typer.type_characters(data[arr[index]],active_window)
+
+clipboarder.copy_paste_characters(data[arr[index]], active_window, typer)
